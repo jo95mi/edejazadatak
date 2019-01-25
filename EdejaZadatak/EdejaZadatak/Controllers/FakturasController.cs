@@ -47,6 +47,7 @@ namespace EdejaZadatak.Models
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BrojFakture,DatumFakture,Ukupno")] Faktura faktura)
         {
+            faktura.DatumFakture = DateTime.Today;
             if (ModelState.IsValid)
             {
                 db.Fakturas.Add(faktura);
