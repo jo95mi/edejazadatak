@@ -27,7 +27,29 @@
         </dd>
 
     </dl>
-</div>
+</div> 
+<table class="table table-responsive table-condensed">
+    <tr>
+        <th>Redni broj</th>
+        <th>Kolicina</th>
+        <th>Cena</th>
+        <th>Ukupno</th>
+        <th>Izmeni</th>
+        <th>Obrisi</th>
+    </tr>
+    @foreach (var item in Model.Stavkas)
+    {
+        <tr>
+            <th>@Html.DisplayFor(ModelItem => item.RedniBroj)</th>
+            <th>@Html.DisplayFor(ModelItem => item.Kolicina)</th>
+            <th>@Html.DisplayFor(ModelItem => item.Cena)</th>
+            <th>@Html.DisplayFor(ModelItem => item.Ukupno)</th>
+            <th>@Html.ActionLink("Izmeni","Edit","StavkasController", new { br=item.BrojFakture }, new { rb = item.RedniBroj })</th>
+            <th>@Html.ActionLink("Obrisi", "Delete", "StavkasController", new { br = item.BrojFakture }, new { rb = item.RedniBroj })</th>
+        </tr>
+    }
+</table> 
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.BrojFakture }) |
     @Html.ActionLink("Back to List", "Index")

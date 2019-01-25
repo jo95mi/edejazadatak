@@ -94,13 +94,13 @@ namespace EdejaZadatak.Models
         }
 
         // GET: Stavkas/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string br, int rb)
         {
-            if (id == null)
+            if (br == null || rb == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stavka stavka = db.Stavkas.Find(id);
+            Stavka stavka = db.Stavkas.Find(br);
             if (stavka == null)
             {
                 return HttpNotFound();

@@ -52,7 +52,7 @@ namespace EdejaZadatak.Models
             {
                 db.Fakturas.Add(faktura);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = faktura.BrojFakture });
             }
 
             return View(faktura);
