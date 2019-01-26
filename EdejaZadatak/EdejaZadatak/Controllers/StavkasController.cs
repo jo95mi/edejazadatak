@@ -38,7 +38,6 @@ namespace EdejaZadatak.Models
         // GET: Stavkas/Create
         public ActionResult Create()
         {
-            ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture");
             return View();
         }
 
@@ -47,13 +46,14 @@ namespace EdejaZadatak.Models
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BrojFakture,RedniBroj,Kolicina,Cena,Ukupno")] Stavka stavka)
+        public ActionResult Create(string id,[Bind(Include = "BrojFakture,RedniBroj,Kolicina,Cena,Ukupno")] Stavka stavka)
         {
             if (ModelState.IsValid)
             {
+                stavka.BrojFakture = id;
                 db.Stavkas.Add(stavka);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Fakturas", new { id =stavka.BrojFakture });
             }
 
             ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture", stavka.BrojFakture);
@@ -61,19 +61,20 @@ namespace EdejaZadatak.Models
         }
 
         // GET: Stavkas/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string br, int rb)
         {
-            if (id == null)
+            if (br == null || rb == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stavka stavka = db.Stavkas.Find(id);
-            if (stavka == null)
+            var stavka = db.Stavkas.Where(r => r.BrojFakture == br);
+            Stavka stavkaa = stavka.Where(a => a.RedniBroj == rb).FirstOrDefault();
+            if (stavkaa == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture", stavka.BrojFakture);
-            return View(stavka);
+            ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture", stavkaa.BrojFakture);
+            return View(stavkaa);
         }
 
         // POST: Stavkas/Edit/5
@@ -87,7 +88,7 @@ namespace EdejaZadatak.Models
             {
                 db.Entry(stavka).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Fakturas", new { id = stavka.BrojFakture });
             }
             ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture", stavka.BrojFakture);
             return View(stavka);
