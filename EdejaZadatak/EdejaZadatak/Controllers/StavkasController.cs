@@ -60,7 +60,11 @@ namespace EdejaZadatak.Models
                     stavka.RedniBroj = temp2.Max(r => r.RedniBroj) + 1;
                 }
                 stavka.BrojFakture = id;
-                db.Stavkas.Add(stavka);                
+                stavka.Ukupno = stavka.Kolicina * stavka.Cena;
+                db.Stavkas.Add(stavka);
+                Faktura fak = db.Fakturas.Find(stavka.BrojFakture);
+                fak.Ukupno += stavka.Ukupno;
+                db.Entry(fak).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Details", "Fakturas", new { id =stavka.BrojFakture });
             }
@@ -95,8 +99,20 @@ namespace EdejaZadatak.Models
         {
             if (ModelState.IsValid)
             {
+                stavka.Ukupno = stavka.Kolicina * stavka.Cena;
                 db.Entry(stavka).State = EntityState.Modified;
                 db.SaveChanges();
+
+                var stavkice = db.Stavkas.Where(r => r.BrojFakture == stavka.BrojFakture);
+                decimal ukupnooo = 0;
+                foreach (Stavka s in stavkice) {
+                    ukupnooo += s.Ukupno;
+                }
+                Faktura f = db.Fakturas.Where(r => r.BrojFakture == stavka.BrojFakture).FirstOrDefault();
+                f.Ukupno = ukupnooo;
+                db.Entry(f).State = EntityState.Modified;
+                db.SaveChanges();
+                
                 return RedirectToAction("Details", "Fakturas", new { id = stavka.BrojFakture });
             }
             ViewBag.BrojFakture = new SelectList(db.Fakturas, "BrojFakture", "BrojFakture", stavka.BrojFakture);
@@ -127,6 +143,9 @@ namespace EdejaZadatak.Models
             var stavka = db.Stavkas.Where(r => r.BrojFakture == br);
             Stavka stavkaa = stavka.Where(a => a.RedniBroj == rb).FirstOrDefault();
             db.Stavkas.Remove(stavkaa);
+            Faktura fak = db.Fakturas.Find(stavkaa.BrojFakture);
+            fak.Ukupno = fak.Ukupno - stavkaa.Ukupno;
+            db.Entry(fak).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Details","Fakturas", new { id = br});
         }
