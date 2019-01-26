@@ -50,8 +50,16 @@ namespace EdejaZadatak.Models
         {
             if (ModelState.IsValid)
             {
+                var temp = db.Stavkas.Where(a=> a.BrojFakture == id);
+                if(temp == null) {
+                    stavka.RedniBroj = 1;
+                }
+                else
+                {
+                    stavka.RedniBroj = temp.Max(r => r.RedniBroj) + 1;
+                }
                 stavka.BrojFakture = id;
-                db.Stavkas.Add(stavka);
+                db.Stavkas.Add(stavka);                
                 db.SaveChanges();
                 return RedirectToAction("Details", "Fakturas", new { id =stavka.BrojFakture });
             }
