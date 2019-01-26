@@ -44,8 +44,17 @@
             <th>@Html.DisplayFor(ModelItem => item.Kolicina)</th>
             <th>@Html.DisplayFor(ModelItem => item.Cena)</th>
             <th>@Html.DisplayFor(ModelItem => item.Ukupno)</th>
-            <th>@Html.ActionLink("Izmeni","Edit","StavkasController", new { br=item.BrojFakture }, new { rb = item.RedniBroj })</th>
-            <th>@Html.ActionLink("Obrisi", "Delete", "StavkasController", new { br = item.BrojFakture }, new { rb = item.RedniBroj })</th>
+            <th>@Html.ActionLink("Izmeni ", "Edit", "Stavkas", new { br = item.BrojFakture, rb = item.RedniBroj }, null)</th>
+            <th>@Html.ActionLink(linkText: "Obrisi",
+                                actionName: "Delete",
+                                controllerName: "Stavkas",
+                                routeValues: new
+                                    {
+                                        br = item.BrojFakture,
+                                        rb = item.RedniBroj
+                                    },
+                                htmlAttributes: null)
+            </th>
         </tr>
     }
 </table> 

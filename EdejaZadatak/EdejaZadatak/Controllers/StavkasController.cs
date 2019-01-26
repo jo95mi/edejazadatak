@@ -100,23 +100,25 @@ namespace EdejaZadatak.Models
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Stavka stavka = db.Stavkas.Find(br);
-            if (stavka == null)
+            var stavka = db.Stavkas.Where(r => r.BrojFakture == br);
+            Stavka stavkaa = stavka.Where(a => a.RedniBroj == rb).FirstOrDefault();
+            if (stavkaa == null)
             {
                 return HttpNotFound();
             }
-            return View(stavka);
+            return View(stavkaa);
         }
 
         // POST: Stavkas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(string br, int rb)
         {
-            Stavka stavka = db.Stavkas.Find(id);
-            db.Stavkas.Remove(stavka);
+            var stavka = db.Stavkas.Where(r => r.BrojFakture == br);
+            Stavka stavkaa = stavka.Where(a => a.RedniBroj == rb).FirstOrDefault();
+            db.Stavkas.Remove(stavkaa);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details","Fakturas", new { id = br});
         }
 
         protected override void Dispose(bool disposing)
