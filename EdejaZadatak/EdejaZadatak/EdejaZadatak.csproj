@@ -250,7 +250,6 @@
     <Content Include="Views\Fakturas\Create.cshtml" />
     <Content Include="Views\Fakturas\Delete.cshtml" />
     <Content Include="Views\Fakturas\Details.cshtml" />
-    <Content Include="Views\Fakturas\Edit.cshtml" />
     <Content Include="Views\Fakturas\Index.cshtml" />
     <Content Include="Views\Stavkas\Create.cshtml" />
     <Content Include="Views\Stavkas\Delete.cshtml" />

@@ -47,7 +47,8 @@ namespace EdejaZadatak.Models
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BrojFakture,DatumFakture,Ukupno")] Faktura faktura)
         {
-            faktura.DatumFakture = DateTime.Today;
+            DateTime dan = DateTime.Today;
+            faktura.DatumFakture = dan.Date;
             if (ModelState.IsValid)
             {
                 db.Fakturas.Add(faktura);
@@ -57,37 +58,6 @@ namespace EdejaZadatak.Models
 
             return View(faktura);
         }
-
-        // GET: Fakturas/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Faktura faktura = db.Fakturas.Find(id);
-            if (faktura == null)
-            {
-                return HttpNotFound();
-            }
-            return View(faktura);
-        }
-        // POST: Fakturas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BrojFakture,DatumFakture,Ukupno")] Faktura faktura)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(faktura).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(faktura);
-        }
-
         // GET: Fakturas/Delete/5
         public ActionResult Delete(string id)
         {
@@ -109,6 +79,8 @@ namespace EdejaZadatak.Models
         public ActionResult DeleteConfirmed(string id)
         {
             Faktura faktura = db.Fakturas.Find(id);
+            var stavke = db.Stavkas.Where(r => r.BrojFakture == id);
+            db.Stavkas.RemoveRange(stavke);
             db.Fakturas.Remove(faktura);
             db.SaveChanges();
             return RedirectToAction("Index");

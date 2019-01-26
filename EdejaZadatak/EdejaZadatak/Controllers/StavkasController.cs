@@ -50,13 +50,14 @@ namespace EdejaZadatak.Models
         {
             if (ModelState.IsValid)
             {
-                var temp = db.Stavkas.Where(a=> a.BrojFakture == id);
+                var temp = db.Stavkas.Where(a=> a.BrojFakture == id).FirstOrDefault();
                 if(temp == null) {
                     stavka.RedniBroj = 1;
                 }
                 else
                 {
-                    stavka.RedniBroj = temp.Max(r => r.RedniBroj) + 1;
+                    var temp2 = db.Stavkas.Where(a => a.BrojFakture == id);
+                    stavka.RedniBroj = temp2.Max(r => r.RedniBroj) + 1;
                 }
                 stavka.BrojFakture = id;
                 db.Stavkas.Add(stavka);                

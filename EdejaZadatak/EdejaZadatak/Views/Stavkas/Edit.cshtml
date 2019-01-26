@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Izmeni stavku</h2>
 
 
 @using (Html.BeginForm())
@@ -51,9 +51,9 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        @Html.ActionLink("Nazad na fakturu", "Details", "Fakturas", new { id = Model.BrojFakture }, null)
+    </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
